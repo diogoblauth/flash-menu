@@ -1,0 +1,21 @@
+// Quasar SCSS (& Sass) Variables
+// --------------------------------------------------
+// https://v2.quasar.dev/style/sass-scss-variables
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+$typography-font-family: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+// Tom neutro escuro como cor primária padrão do painel
+// (a vitrine pública usa a cor configurada por cada restaurante via CSS custom property).
+$primary: #1f2937;
+$secondary: #6b7280;
+$accent: #f97316;
+
+$dark: #1d1d1d;
+$dark-page: #121212;
+
+$positive: #21ba45;
+$negative: #c10015;
+$info: #31ccec;
+$warning: #f2c037;

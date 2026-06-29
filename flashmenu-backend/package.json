@@ -1,0 +1,43 @@
+{
+  "name": "flashmenu-backend",
+  "version": "0.0.1",
+  "description": "API do FlashMenu — cardápio digital via QR code",
+  "author": "Diogo Blauth",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "predev": "docker compose up -d && npx prisma db push",
+    "dev": "nodemon",
+    "start": "node src/index.js",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "lint": "eslint \"./src/**/*.js\"",
+    "format": "prettier --write \"**/*.{js,json,md}\"",
+    "postinstall": "prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.5.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.14.0",
+    "@vue/eslint-config-prettier": "^10.1.0",
+    "eslint": "^9.14.0",
+    "globals": "^15.12.0",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.3.3",
+    "prisma": "^6.5.0"
+  },
+  "engines": {
+    "node": "^28 || ^26 || ^24 || ^22 || ^20 || ^18",
+    "npm": ">= 6.13.4"
+  }
+}

@@ -1,0 +1,16 @@
+node_modules/
+
+# dotenv (mantém .env.example versionado)
+.env
+.env.*
+!.env.example
+
+# Prisma generated (regenerado no postinstall)
+node_modules/.prisma/
+
+# Logs
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
