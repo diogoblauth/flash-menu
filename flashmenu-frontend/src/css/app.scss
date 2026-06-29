@@ -1,13 +1,163 @@
-// Estilos globais do aplicativo.
+// FlashMenu Design System "Ember"
+// Paleta: âmbar quente + stone neutrals. Sem azul corporativo.
 
-// Inputs com cantos mais arredondados (padrão visual do painel).
-.q-field--outlined .q-field__control {
-  border-radius: 12px;
+// ─── Tokens ─────────────────────────────────────────────────────────────────
+:root {
+  // Accent — verde profundo, food SaaS
+  --fm-brand:           #166534;
+  --fm-brand-hover:     #14532D;
+  --fm-brand-subtle:    rgba(22, 101, 52, 0.08);
+  --fm-brand-ring:      rgba(22, 101, 52, 0.2);
+
+  // Sidebar verde escuro — diferencial visual do setor alimentício
+  --fm-sidebar-bg:              #14532D;
+  --fm-sidebar-text:            #A7F3D0;
+  --fm-sidebar-hover:           rgba(255, 255, 255, 0.07);
+  --fm-sidebar-active-bg:       rgba(134, 239, 172, 0.12);
+  --fm-sidebar-active-border:   #86EFAC;
+  --fm-sidebar-active-text:     #FFFFFF;
+
+  // Superfícies (stone scale — tem temperatura)
+  --fm-content-bg:     #FAFAF9;
+  --fm-surface:        #FFFFFF;
+  --fm-border:         #E7E5E4;
+  --fm-border-strong:  #D6D3D1;
+
+  // Texto
+  --fm-text-primary:   #1C1917;
+  --fm-text-secondary: #78716C;
+  --fm-text-tertiary:  #A8A29E;
+
+  // Semânticos
+  --fm-success:        #15803D;
+  --fm-success-bg:     #F0FDF4;
+  --fm-success-border: #BBF7D0;
+  --fm-danger:         #DC2626;
+  --fm-danger-bg:      #FEF2F2;
+  --fm-danger-border:  #FECACA;
+  --fm-warning:        #D97706;
+
+  // Sombras
+  --fm-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --fm-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --fm-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --fm-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.07), 0 4px 6px rgba(0, 0, 0, 0.04);
+
+  // Border radius
+  --fm-radius-xs: 4px;
+  --fm-radius-sm: 6px;
+  --fm-radius:    8px;
+  --fm-radius-md: 10px;
+  --fm-radius-lg: 12px;
+  --fm-radius-xl: 16px;
+  --fm-radius-2xl: 20px;
+
+  // Transição padrão
+  --fm-transition: 150ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-// Notificações customizadas (util/notify.js).
+// ─── Reset e base ────────────────────────────────────────────────────────────
+body {
+  background-color: var(--fm-content-bg);
+  color: var(--fm-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// ─── Inputs ─────────────────────────────────────────────────────────────────
+.q-field--outlined .q-field__control {
+  border-radius: var(--fm-radius-md);
+  border-color: var(--fm-border);
+}
+
+.q-field--outlined.q-field--focused .q-field__control {
+  border-color: var(--fm-brand);
+  box-shadow: 0 0 0 3px var(--fm-brand-ring);
+}
+
+// ─── Botões ─────────────────────────────────────────────────────────────────
+.q-btn {
+  border-radius: var(--fm-radius);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+// ─── Notificações (util/notify.js) ──────────────────────────────────────────
 .my-notify {
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+  border-radius: var(--fm-radius-lg);
+  box-shadow: var(--fm-shadow-md);
   padding: 12px 16px;
+  font-size: 0.875rem;
+}
+
+// ─── Utilitários de card ─────────────────────────────────────────────────────
+.fm-card {
+  background: var(--fm-surface);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius-lg);
+  box-shadow: var(--fm-shadow-xs);
+  transition: border-color var(--fm-transition), box-shadow var(--fm-transition);
+}
+
+.fm-card--interactive:hover {
+  border-color: var(--fm-border-strong);
+  box-shadow: var(--fm-shadow-sm);
+  cursor: pointer;
+}
+
+// ─── Badges de status ────────────────────────────────────────────────────────
+.fm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border: 1px solid transparent;
+  line-height: 1.6;
+}
+
+.fm-badge--success {
+  background: var(--fm-success-bg);
+  color: var(--fm-success);
+  border-color: var(--fm-success-border);
+}
+
+.fm-badge--muted {
+  background: var(--fm-content-bg);
+  color: var(--fm-text-tertiary);
+  border-color: var(--fm-border);
+}
+
+.fm-badge--brand {
+  background: var(--fm-brand-subtle);
+  color: var(--fm-brand-hover);
+  border-color: rgba(22, 101, 52, 0.2);
+}
+
+.fm-badge--danger {
+  background: var(--fm-danger-bg);
+  color: var(--fm-danger);
+  border-color: var(--fm-danger-border);
+}
+
+// ─── Labels tipográficas ─────────────────────────────────────────────────────
+.fm-label {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fm-text-tertiary);
+  line-height: 1;
+}
+
+// ─── Título de página ─────────────────────────────────────────────────────────
+.fm-page-title {
+  font-size: clamp(1.25rem, 2vw, 1.625rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--fm-text-primary);
 }

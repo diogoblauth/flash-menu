@@ -2,20 +2,20 @@
 // --------------------------------------------------
 // https://v2.quasar.dev/style/sass-scss-variables
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 $typography-font-family: 'Inter', -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-// Tom neutro escuro como cor primária padrão do painel
-// (a vitrine pública usa a cor configurada por cada restaurante via CSS custom property).
-$primary: #1f2937;
-$secondary: #6b7280;
-$accent: #f97316;
+// FlashMenu Design System "Ember"
+// $primary: verde-800 (#166534) — verde profundo, contraste 6.5:1 com branco.
+$primary:   #166534;
+$secondary: #78716C;
+$accent:    #15803D;
 
-$dark: #1d1d1d;
-$dark-page: #121212;
+$dark:      #14532D;
+$dark-page: #14532D;
 
-$positive: #21ba45;
-$negative: #c10015;
-$info: #31ccec;
-$warning: #f2c037;
+$positive:  #15803D;
+$negative:  #DC2626;
+$info:      #0369A1;
+$warning:   #D97706;
