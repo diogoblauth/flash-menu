@@ -1,14 +1,14 @@
 import { verifyToken } from '../core/auth/jwt.js'
 
 export function authenticate(req, res, next) {
-  const token = req.headers?.authorization?.replace('Bearer ', '')
+  const authHeader = req.headers.authorization
 
-  if (!token) {
+  if (!authHeader?.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'Token não encontrado' })
   }
 
   try {
-    req.decoded = verifyToken(token)
+    req.decoded = verifyToken(authHeader.slice(7))
     next()
   } catch (error) {
     next(error)
