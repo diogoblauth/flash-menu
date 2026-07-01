@@ -25,6 +25,7 @@
     "quasar": "^2.16.0",
     "swrv": "^1.2.0",
     "vue": "^3.4.18",
+    "vue-advanced-cropper": "^2.8.9",
     "vue-router": "^4.0.12",
     "vuedraggable": "^4.1.0"
   },
