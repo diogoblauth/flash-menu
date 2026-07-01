@@ -23,7 +23,6 @@
           ref="cropperRef"
           class="cropper"
           :src="imageSrc"
-          :stencil-component="CircleStencil"
           :stencil-props="{ aspectRatio: 1 }"
           image-restriction="stencil"
         />
@@ -45,7 +44,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
-import { Cropper, CircleStencil } from 'vue-advanced-cropper'
+import { Cropper } from 'vue-advanced-cropper'
 import { X, Crop, RotateCcw } from 'lucide-vue-next'
 import 'vue-advanced-cropper/dist/style.css'
 
@@ -199,7 +198,6 @@ function handleConfirm() {
 /* ── Acentua os controles do cropper com a cor de marca ── */
 .cropper-wrap :deep(.vue-advanced-cropper__background) {
   background: var(--fm-content-bg);
-  border-radius: 50%;
 }
 
 .cropper-wrap :deep(.vue-simple-line) {
@@ -212,7 +210,7 @@ function handleConfirm() {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
 }
 
-.cropper-wrap :deep(.vue-circle-stencil__preview) {
+.cropper-wrap :deep(.vue-rectangle-stencil__preview) {
   box-shadow: 0 0 0 2px var(--fm-brand);
 }
 </style>
