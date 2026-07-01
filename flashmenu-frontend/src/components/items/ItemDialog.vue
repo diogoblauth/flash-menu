@@ -46,14 +46,7 @@
             class="form-field"
             :rules="[val => (val !== null && val !== '' && Number(val) > 0) || 'Preço deve ser positivo']"
           />
-          <q-input
-            v-model="photo"
-            label="URL da foto (opcional)"
-            outlined
-            dense
-            class="form-field"
-            :rules="[val => !val || urlPattern.test(val) || 'Informe uma URL válida (http:// ou https://)']"
-          />
+          <AppImageUpload v-model="photo" class="form-field" @uploading="(val) => (photoUploading = val)" />
           <q-select
             v-model="categoryId"
             label="Categoria"
@@ -82,6 +75,7 @@
           class="sheet-btn"
           label="Salvar"
           :loading="loading"
+          :disable="photoUploading"
           @click="handleSave"
         />
         <q-btn flat no-caps class="sheet-btn sheet-btn--cancel" label="Cancelar" @click="onDialogCancel" />
@@ -132,14 +126,7 @@
             class="form-field"
             :rules="[val => (val !== null && val !== '' && Number(val) > 0) || 'Preço deve ser positivo']"
           />
-          <q-input
-            v-model="photo"
-            label="URL da foto (opcional)"
-            outlined
-            dense
-            class="form-field"
-            :rules="[val => !val || urlPattern.test(val) || 'Informe uma URL válida (http:// ou https://)']"
-          />
+          <AppImageUpload v-model="photo" class="form-field" @uploading="(val) => (photoUploading = val)" />
           <q-select
             v-model="categoryId"
             label="Categoria"
@@ -162,7 +149,15 @@
 
       <q-card-actions align="right" class="desktop-actions">
         <q-btn flat no-caps label="Cancelar" @click="onDialogCancel" />
-        <q-btn unelevated no-caps color="primary" label="Salvar" :loading="loading" @click="handleSave" />
+        <q-btn
+          unelevated
+          no-caps
+          color="primary"
+          label="Salvar"
+          :loading="loading"
+          :disable="photoUploading"
+          @click="handleSave"
+        />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -174,6 +169,7 @@ import { useDialogPluginComponent, useQuasar } from 'quasar'
 import { createItem, updateItem } from 'src/api/items'
 import { listCategories } from 'src/api/categories'
 import { notifyError } from 'src/util/notify'
+import AppImageUpload from 'src/components/ui/AppImageUpload.vue'
 
 const props = defineProps({
   item: { type: Object, default: null },
@@ -184,15 +180,14 @@ defineEmits([...useDialogPluginComponent.emits])
 const $q = useQuasar()
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
 
-const urlPattern = /^https?:\/\/.+/
-
 const formRef = ref(null)
 const loading = ref(false)
+const photoUploading = ref(false)
 
 const name = ref(props.item?.name ?? '')
 const description = ref(props.item?.description ?? '')
 const price = ref(props.item ? Number(props.item.price) : null)
-const photo = ref(props.item?.photo ?? '')
+const photo = ref(props.item?.photo ?? null)
 const categoryId = ref(props.item?.categoryId ?? null)
 const active = ref(props.item?.active ?? true)
 
@@ -222,7 +217,7 @@ async function handleSave() {
       name: name.value.trim(),
       description: description.value?.trim() || undefined,
       price: Number(price.value),
-      photo: photo.value?.trim() || undefined,
+      photo: photo.value ? photo.value.trim() : null,
       categoryId: categoryId.value,
     }
 
