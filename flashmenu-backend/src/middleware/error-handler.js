@@ -1,4 +1,5 @@
 import { ZodError } from 'zod'
+import multer from 'multer'
 
 const isDev = process.env.NODE_ENV !== 'production'
 
@@ -8,6 +9,12 @@ export function errorHandler(error, _req, res, _next) {
       message: 'Dados inválidos',
       errors: error.flatten().fieldErrors,
     })
+  }
+
+  if (error instanceof multer.MulterError) {
+    const message =
+      error.code === 'LIMIT_FILE_SIZE' ? 'Arquivo excede o limite de 2MB' : 'Erro no upload do arquivo'
+    return res.status(400).json({ message })
   }
 
   if (typeof error.httpStatus === 'number') {
