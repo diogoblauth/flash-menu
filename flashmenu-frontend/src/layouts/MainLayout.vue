@@ -85,6 +85,7 @@
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
+      :behavior="$q.screen.lt.md ? 'mobile' : 'desktop'"
       :width="248"
       :style="{ background: 'var(--fm-sidebar-bg)' }"
     >
@@ -136,6 +137,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import {
   UtensilsCrossed,
   LayoutDashboard,
@@ -151,6 +153,7 @@ import { useAuthStore } from 'src/stores/auth'
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
+const $q = useQuasar()
 
 const leftDrawerOpen = ref(false)
 
