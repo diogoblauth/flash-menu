@@ -199,9 +199,7 @@ function onDragUpdate(groupKey, newGroupItems) {
 async function onReorder(groupKey) {
   const categoryId = groupKey === UNCATEGORIZED_KEY ? null : groupKey
   const snapshot = [...items.value]
-  const groupItems = items.value
-    .filter((item) => item.categoryId === categoryId)
-    .sort((a, b) => a.sortOrder - b.sortOrder)
+  const groupItems = items.value.filter((item) => item.categoryId === categoryId)
   const payload = groupItems.map((item, index) => ({ id: item.id, sortOrder: index }))
 
   groupItems.forEach((item, index) => {
