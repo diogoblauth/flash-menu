@@ -8,7 +8,7 @@
           color="primary"
           label="Salvar alterações"
           :loading="savingProfile"
-          :disable="logoUploading || hoursInvalid || !hasChanges"
+          :disable="logoUploading || bannerUploading || hoursInvalid || !hasChanges"
           @click="saveProfile"
         />
       </template>
@@ -105,12 +105,26 @@
               <p class="fm-label settings__card-title">Perfil</p>
             </header>
 
-            <p class="settings__field-label">Logo</p>
-            <AppImageUpload
-              v-model="form.logo"
-              class="form-field"
-              @uploading="(v) => (logoUploading = v)"
-            />
+            <p class="settings__field-label">Logo e banner</p>
+            <div class="media-cover form-field">
+              <div class="media-cover__banner">
+                <AppImageUpload
+                  v-model="form.banner"
+                  :aspect-ratio="bannerAspect"
+                  @uploading="(v) => (bannerUploading = v)"
+                />
+              </div>
+              <div class="media-cover__logo">
+                <AppImageUpload
+                  v-model="form.logo"
+                  round
+                  @uploading="(v) => (logoUploading = v)"
+                />
+              </div>
+            </div>
+            <p class="media-cover__caption">
+              O banner é opcional. A logo aparece sobreposta, como numa vitrine.
+            </p>
 
             <q-input
               v-model="form.name"
@@ -258,6 +272,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
+import { useQuasar } from 'quasar'
 import {
   Globe,
   Copy,
@@ -279,11 +294,16 @@ import { notifySuccess, notifyError } from 'src/util/notify'
 document.title = 'Configurações — FlashMenu'
 
 const authStore = useAuthStore()
+const $q = useQuasar()
+
+// Banner mais baixo (proporção mais larga) no desktop; 3:1 no mobile
+const bannerAspect = computed(() => ($q.screen.gt.sm ? 4 : 3))
 
 const loading = ref(true)
 const savingProfile = ref(false)
 const savingPassword = ref(false)
 const logoUploading = ref(false)
+const bannerUploading = ref(false)
 const showCurrent = ref(false)
 const showNext = ref(false)
 const copied = ref(false)
@@ -300,6 +320,7 @@ const form = reactive({
   slug: '',
   description: '',
   logo: null,
+  banner: null,
   primaryColor: '#166534',
   openingHours: null,
 })
@@ -340,6 +361,7 @@ function snapshot() {
     slug: form.slug,
     description: form.description,
     logo: form.logo,
+    banner: form.banner,
     primaryColor: form.primaryColor,
     openingHours: form.openingHours,
   })
@@ -352,6 +374,7 @@ function applyRestaurant(r) {
   form.slug = r.slug ?? ''
   form.description = r.description ?? ''
   form.logo = r.logo ?? null
+  form.banner = r.banner ?? null
   form.primaryColor = r.primaryColor ?? '#166534'
   form.openingHours = r.openingHours ?? null
   initialSnapshot = snapshot()
@@ -390,7 +413,8 @@ async function saveProfile() {
       name: form.name.trim(),
       slug: form.slug.trim(),
       description: form.description?.trim() || undefined,
-      logo: form.logo || undefined,
+      logo: form.logo,
+      banner: form.banner,
       primaryColor: form.primaryColor,
       openingHours: form.openingHours || undefined,
     })
@@ -475,6 +499,39 @@ fetchRestaurant()
 
 .form-field + .form-field {
   margin-top: 14px;
+}
+
+/* Padrão "cover + avatar": banner como capa, logo redonda sobreposta no canto inferior esquerdo */
+.media-cover {
+  position: relative;
+  padding-bottom: 36px; /* espaço para a logo que ultrapassa a base do banner */
+}
+
+.media-cover__banner {
+  width: 100%;
+}
+
+.media-cover__logo {
+  position: absolute;
+  left: 16px;
+  bottom: 0;
+  width: 104px;
+  padding: 4px;
+  background: var(--fm-surface);
+  border-radius: 50%;
+  box-shadow: var(--fm-shadow-sm);
+}
+
+/* A logo redonda preenche o anel branco do contêiner */
+.media-cover__logo :deep(.app-image-upload--round) {
+  width: 100%;
+}
+
+.media-cover__caption {
+  margin: 8px 0 20px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--fm-text-tertiary);
 }
 
 .slug-info {

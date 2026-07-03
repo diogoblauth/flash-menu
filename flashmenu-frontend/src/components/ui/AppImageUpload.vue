@@ -1,5 +1,8 @@
 <template>
-  <div class="app-image-upload">
+  <div
+    class="app-image-upload"
+    :class="{ 'app-image-upload--round': round, 'app-image-upload--banner': aspectRatio && !round }"
+  >
     <input
       ref="inputRef"
       type="file"
@@ -12,6 +15,7 @@
       v-if="!previewUrl"
       class="dropzone"
       :class="{ 'dropzone--dragging': dragging }"
+      :style="boxStyle"
       @click="openPicker"
       @dragover.prevent="dragging = true"
       @dragleave.prevent="dragging = false"
@@ -24,7 +28,14 @@
       <p class="dropzone-hint">JPEG, PNG ou WebP · até 2MB</p>
     </div>
 
-    <div v-else class="preview" @dragover.prevent="dragging = true" @dragleave.prevent="dragging = false" @drop.prevent="onDrop">
+    <div
+      v-else
+      class="preview"
+      :style="boxStyle"
+      @dragover.prevent="dragging = true"
+      @dragleave.prevent="dragging = false"
+      @drop.prevent="onDrop"
+    >
       <img :src="previewUrl" alt="Foto do item" class="preview-image" />
 
       <div v-if="uploading" class="preview-overlay">
@@ -45,7 +56,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, onBeforeUnmount, watch } from 'vue'
 import { useQuasar } from 'quasar'
 import { ImagePlus, X } from 'lucide-vue-next'
 import { uploadImage } from 'src/api/uploads'
@@ -59,9 +70,18 @@ const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 const props = defineProps({
   modelValue: { type: String, default: null },
+  aspectRatio: { type: Number, default: null }, // ex.: 3 para banner (retângulo largo)
+  round: { type: Boolean, default: false }, // logo redonda (1:1)
 })
 
 const emit = defineEmits(['update:modelValue', 'uploading'])
+
+// Proporção do quadro de banner (ignorada quando round, que já é 1:1)
+const boxStyle = computed(() =>
+  props.aspectRatio && !props.round
+    ? { aspectRatio: String(props.aspectRatio), height: 'auto' }
+    : {},
+)
 
 const inputRef = ref(null)
 const dragging = ref(false)
@@ -112,7 +132,13 @@ function handleFile(file) {
   const cropSrc = URL.createObjectURL(file)
   $q.dialog({
     component: AppImageCropDialog,
-    componentProps: { imageSrc: cropSrc, mimeType: file.type, fileName: file.name },
+    componentProps: {
+      imageSrc: cropSrc,
+      mimeType: file.type,
+      fileName: file.name,
+      round: props.round,
+      aspectRatio: props.aspectRatio ?? 1,
+    },
   })
     .onOk((croppedFile) => {
       uploadFile(croppedFile)
@@ -283,6 +309,59 @@ onBeforeUnmount(revokeLocalBlob)
 }
 
 .preview:hover .preview-change {
+  opacity: 1;
+}
+
+/* ── Variante redonda (logo 1:1); o tamanho é controlado pelo contêiner ── */
+.app-image-upload--round {
+  width: 150px;
+}
+
+.app-image-upload--round .dropzone,
+.app-image-upload--round .preview {
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+/* Estado vazio como avatar: só o ícone "+" dentro do círculo */
+.app-image-upload--round .dropzone {
+  gap: 0;
+}
+
+.app-image-upload--round .dropzone-hint,
+.app-image-upload--round .dropzone-text {
+  display: none;
+}
+
+.app-image-upload--round .dropzone-icon {
+  margin-bottom: 0;
+}
+
+/* Overlay cobre o círculo inteiro (evita corte pelo border-radius) */
+.app-image-upload--round .preview-change {
+  inset: 0;
+  flex-direction: column;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.app-image-upload--round .preview:hover .preview-change {
+  opacity: 1;
+}
+
+/* X no canto superior direito, acima do overlay (senão o overlay captura o clique) e
+   levemente para dentro para não ser cortado pela borda do círculo */
+.app-image-upload--round .preview-remove {
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 30px;
+  height: 30px;
+}
+
+/* ── Variante banner (retângulo largo): a proporção vem do :style boxStyle ── */
+.app-image-upload--banner .preview-change {
   opacity: 1;
 }
 </style>

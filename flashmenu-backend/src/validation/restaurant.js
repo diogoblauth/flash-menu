@@ -38,7 +38,8 @@ export const updateRestaurantSchema = z.object({
     .refine((s) => s.length >= 2, 'Endereço da vitrine inválido')
     .optional(),
   description: z.string().max(500, 'Descrição muito longa').trim().optional(),
-  logo: z.string().url('Logo deve ser uma URL válida').optional(),
+  logo: z.string().url('Logo deve ser uma URL válida').nullable().optional(),
+  banner: z.string().url('Banner deve ser uma URL válida').nullable().optional(),
   primaryColor: z
     .string()
     .regex(/^#[0-9a-fA-F]{6}$/, 'Cor primária deve ser um hex válido (#rrggbb)')
