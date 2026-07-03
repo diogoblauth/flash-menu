@@ -37,3 +37,12 @@ export const updateRestaurantSchema = z.object({
     .optional(),
   openingHours: openingHoursSchema.optional(),
 })
+
+export const changePasswordSchema = z.object({
+  // max 128: previne bcrypt DoS (mesmo limite do registro/login)
+  currentPassword: z.string().min(1, 'Senha atual obrigatória').max(128, 'Senha muito longa'),
+  newPassword: z
+    .string()
+    .min(8, 'Senha deve ter ao menos 8 caracteres')
+    .max(128, 'Senha muito longa'),
+})

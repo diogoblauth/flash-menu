@@ -25,6 +25,14 @@ async function findById(id) {
 }
 
 /**
+ * Inclui o hash da senha — usar apenas em fluxos sensíveis (ex: troca de senha).
+ * @param {number} id
+ */
+async function findByIdWithPassword(id) {
+  return prisma.restaurant.findUnique({ where: { id } })
+}
+
+/**
  * @param {{ name: string, slug: string, email: string, password: string }} data
  */
 async function create(data) {
@@ -39,4 +47,20 @@ async function update(id, data) {
   return prisma.restaurant.update({ where: { id }, data })
 }
 
-export const restaurantRepository = { findByEmail, findBySlug, findById, create, update }
+/**
+ * @param {number} id
+ * @param {string} hashedPassword
+ */
+async function updatePassword(id, hashedPassword) {
+  return prisma.restaurant.update({ where: { id }, data: { password: hashedPassword } })
+}
+
+export const restaurantRepository = {
+  findByEmail,
+  findBySlug,
+  findById,
+  findByIdWithPassword,
+  create,
+  update,
+  updatePassword,
+}
