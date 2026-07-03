@@ -20,7 +20,7 @@ async function findBySlug(slug) {
 async function findById(id) {
   return prisma.restaurant.findUnique({
     where: { id },
-    select: { id: true, name: true, slug: true, description: true, logo: true, primaryColor: true, email: true, createdAt: true },
+    select: { id: true, name: true, slug: true, description: true, logo: true, primaryColor: true, openingHours: true, email: true, createdAt: true },
   })
 }
 
@@ -33,7 +33,7 @@ async function create(data) {
 
 /**
  * @param {number} id
- * @param {Partial<{ name: string, description: string, logo: string, primaryColor: string }>} data
+ * @param {Partial<{ name: string, description: string, logo: string, primaryColor: string, openingHours: object }>} data
  */
 async function update(id, data) {
   return prisma.restaurant.update({ where: { id }, data })

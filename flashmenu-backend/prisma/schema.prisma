@@ -16,6 +16,7 @@ model Restaurant {
   primaryColor String     @default("#1f2937")
   email        String     @unique
   password     String
+  openingHours Json?
   createdAt    DateTime   @default(now())
   categories   Category[]
   items        Item[]
