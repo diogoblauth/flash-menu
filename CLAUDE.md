@@ -50,7 +50,7 @@ Escaneia o QR code ou acessa o link direto. Vê o cardápio público sem precisa
 - Gerado automaticamente no cadastro a partir do nome do restaurante.
 - Convertido para lowercase, espaços viram hífens, caracteres especiais são removidos.
 - Deve ser único no sistema. Se já existir, um sufixo numérico é adicionado (ex: `pizzaria-roma-2`).
-- Não pode ser alterado após o cadastro (garante que QR codes impressos continuem válidos).
+- Pode ser alterado nas configurações do perfil. A nova entrada passa pela mesma normalização e checagem de unicidade. Ao alterar, os QR codes já impressos deixam de funcionar — a interface exibe esse aviso antes de salvar.
 
 ### Itens do cardápio
 - Um item pode estar **ativo** (visível no cardápio) ou **inativo** (aparece como "Esgotado" com visual diferente, mas não é deletado).
@@ -131,8 +131,8 @@ Estas limitações são intencionais para manter o escopo manejável. Funcionali
 
 ## Decisões de produto relevantes para o desenvolvimento
 
-**Por que o slug não pode mudar?**
-Restaurantes imprimem o QR code em cardápios físicos, adesivos e banners. Se o slug mudasse, todos os QR codes impressos deixariam de funcionar. Por isso o slug é imutável após o cadastro.
+**Por que a edição do slug exibe um aviso?**
+Restaurantes imprimem o QR code em cardápios físicos, adesivos e banners. Se o slug muda, todos os QR codes impressos deixam de funcionar. A edição é permitida (o dono pode querer corrigir ou rebrandar o endereço), mas a interface deixa claro esse impacto antes de salvar, para que a decisão seja consciente.
 
 **Por que itens inativos não são deletados?**
 O restaurante pode desativar um item temporariamente (ex: item esgotado hoje, disponível amanhã). Deletar e recadastrar seria trabalhoso. O toggle de disponibilidade é a solução correto.

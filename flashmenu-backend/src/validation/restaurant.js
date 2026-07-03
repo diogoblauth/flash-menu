@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { slugify } from '../core/slug.js'
 
 const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/
 
@@ -29,6 +30,13 @@ const openingHoursSchema = z.object({
 
 export const updateRestaurantSchema = z.object({
   name: z.string().min(2, 'Nome deve ter ao menos 2 caracteres').max(100).trim().optional(),
+  slug: z
+    .string()
+    .min(2, 'Endereço da vitrine muito curto')
+    .max(60, 'Endereço da vitrine muito longo')
+    .transform((s) => slugify(s))
+    .refine((s) => s.length >= 2, 'Endereço da vitrine inválido')
+    .optional(),
   description: z.string().max(500, 'Descrição muito longa').trim().optional(),
   logo: z.string().url('Logo deve ser uma URL válida').optional(),
   primaryColor: z

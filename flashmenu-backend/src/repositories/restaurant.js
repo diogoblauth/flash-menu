@@ -41,7 +41,7 @@ async function create(data) {
 
 /**
  * @param {number} id
- * @param {Partial<{ name: string, description: string, logo: string, primaryColor: string, openingHours: object }>} data
+ * @param {Partial<{ name: string, slug: string, description: string, logo: string, primaryColor: string, openingHours: object }>} data
  */
 async function update(id, data) {
   return prisma.restaurant.update({ where: { id }, data })
