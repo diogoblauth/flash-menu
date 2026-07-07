@@ -31,7 +31,13 @@
           <!-- Avatar com dropdown -->
           <q-btn flat dense round class="header-avatar-btn" :ripple="false">
             <div class="header-avatar" :title="authStore.restaurantName || 'Perfil'">
-              {{ avatarInitial }}
+              <img
+                v-if="avatarLogoUrl"
+                :src="avatarLogoUrl"
+                :alt="authStore.restaurantName || 'Perfil'"
+                class="header-avatar__img"
+              />
+              <template v-else>{{ avatarInitial }}</template>
             </div>
             <q-menu anchor="bottom right" self="top right" :offset="[0, 6]" class="avatar-menu">
               <!-- Cabeçalho do menu -->
@@ -168,6 +174,8 @@ const avatarInitial = computed(() => {
   return name ? name.charAt(0).toUpperCase() : '?'
 })
 
+const avatarLogoUrl = computed(() => authStore.restaurant?.logo || null)
+
 function toggleDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
@@ -266,6 +274,13 @@ function handleLogout() {
 .header-avatar:hover {
   background: rgba(134, 239, 172, 0.3);
   border-color: rgba(134, 239, 172, 0.5);
+}
+
+.header-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
 }
 </style>
 

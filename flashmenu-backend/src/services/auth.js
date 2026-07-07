@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import { restaurantRepository } from '../repositories/restaurant.js'
 import { createToken } from '../core/auth/jwt.js'
+import { slugify } from '../core/slug.js'
 import { UnauthorizedError, ConflictError, NotFoundError } from '../core/errors/http-errors.js'
 
 export async function loginService({ email, password }) {
@@ -38,13 +39,7 @@ export async function getMeService(restaurantId) {
 }
 
 async function generateSlug(name) {
-  const base = name
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '') // remove diacríticos corretamente
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-')
+  const base = slugify(name)
 
   let slug = base
   let suffix = 2

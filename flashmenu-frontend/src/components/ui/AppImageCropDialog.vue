@@ -23,7 +23,8 @@
           ref="cropperRef"
           class="cropper"
           :src="imageSrc"
-          :stencil-props="{ aspectRatio: 1 }"
+          :stencil-component="round ? CircleStencil : RectangleStencil"
+          :stencil-props="round ? {} : { aspectRatio }"
           image-restriction="stencil"
         />
 
@@ -44,7 +45,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useDialogPluginComponent, useQuasar } from 'quasar'
-import { Cropper } from 'vue-advanced-cropper'
+import { Cropper, RectangleStencil, CircleStencil } from 'vue-advanced-cropper'
 import { X, Crop, RotateCcw } from 'lucide-vue-next'
 import 'vue-advanced-cropper/dist/style.css'
 
@@ -52,6 +53,8 @@ const props = defineProps({
   imageSrc: { type: String, required: true },
   mimeType: { type: String, required: true },
   fileName: { type: String, required: true },
+  aspectRatio: { type: Number, default: 1 },
+  round: { type: Boolean, default: false },
 })
 
 defineEmits([...useDialogPluginComponent.emits])
@@ -65,7 +68,8 @@ const naturalAspectRatio = ref(1)
 // Ajusta a altura do editor à proporção real da imagem, evitando faixas vazias
 const wrapStyle = computed(() => {
   if ($q.screen.lt.sm) return {}
-  const clamped = Math.min(Math.max(naturalAspectRatio.value, 0.6), 1.8)
+  const upper = props.round ? 1.8 : Math.max(1.8, props.aspectRatio)
+  const clamped = Math.min(Math.max(naturalAspectRatio.value, 0.6), upper)
   return { aspectRatio: String(clamped), height: 'auto', maxHeight: '65vh' }
 })
 

@@ -13,9 +13,11 @@ model Restaurant {
   slug         String     @unique
   description  String?
   logo         String?
+  banner       String?
   primaryColor String     @default("#1f2937")
   email        String     @unique
   password     String
+  openingHours Json?
   createdAt    DateTime   @default(now())
   categories   Category[]
   items        Item[]
