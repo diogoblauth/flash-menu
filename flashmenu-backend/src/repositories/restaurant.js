@@ -24,6 +24,53 @@ async function findById(id) {
   })
 }
 
+const publicItemSelect = {
+  id: true,
+  name: true,
+  description: true,
+  price: true,
+  photo: true,
+  active: true,
+  sortOrder: true,
+}
+
+/**
+ * Dados públicos da vitrine em uma única query — sem campos sensíveis (email, password).
+ * Itens inativos vêm ao final de cada categoria (active desc).
+ * @param {string} slug
+ */
+async function findPublicBySlug(slug) {
+  return prisma.restaurant.findUnique({
+    where: { slug },
+    select: {
+      name: true,
+      slug: true,
+      description: true,
+      logo: true,
+      banner: true,
+      primaryColor: true,
+      openingHours: true,
+      categories: {
+        orderBy: { sortOrder: 'asc' },
+        select: {
+          id: true,
+          name: true,
+          sortOrder: true,
+          items: {
+            orderBy: [{ active: 'desc' }, { sortOrder: 'asc' }],
+            select: publicItemSelect,
+          },
+        },
+      },
+      items: {
+        where: { categoryId: null },
+        orderBy: [{ active: 'desc' }, { sortOrder: 'asc' }],
+        select: publicItemSelect,
+      },
+    },
+  })
+}
+
 /**
  * Inclui o hash da senha — usar apenas em fluxos sensíveis (ex: troca de senha).
  * @param {number} id
@@ -58,6 +105,7 @@ async function updatePassword(id, hashedPassword) {
 export const restaurantRepository = {
   findByEmail,
   findBySlug,
+  findPublicBySlug,
   findById,
   findByIdWithPassword,
   create,
