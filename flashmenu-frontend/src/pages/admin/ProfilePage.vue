@@ -412,7 +412,7 @@ async function saveProfile() {
     const res = await updateMyRestaurant({
       name: form.name.trim(),
       slug: form.slug.trim(),
-      description: form.description?.trim() || undefined,
+      description: form.description.trim() || null,
       logo: form.logo,
       banner: form.banner,
       primaryColor: form.primaryColor,

@@ -37,7 +37,7 @@ export const updateRestaurantSchema = z.object({
     .transform((s) => slugify(s))
     .refine((s) => s.length >= 2, 'Endereço da vitrine inválido')
     .optional(),
-  description: z.string().max(500, 'Descrição muito longa').trim().optional(),
+  description: z.string().max(500, 'Descrição muito longa').trim().nullable().optional(),
   logo: z.string().url('Logo deve ser uma URL válida').nullable().optional(),
   banner: z.string().url('Banner deve ser uma URL válida').nullable().optional(),
   primaryColor: z
