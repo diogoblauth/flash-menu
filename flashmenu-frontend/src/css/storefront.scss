@@ -1,0 +1,43 @@
+// Vitrine pública — estilos escopados sob .sf-page (nunca vazam para o admin).
+// Tema por restaurante via vars --sf-* injetadas inline pelo StorefrontPage.
+
+.sf-page {
+  min-height: 100vh;
+  background: var(--fm-content-bg);
+  color: var(--fm-text-primary);
+
+  &__container {
+    max-width: 680px;
+    margin: 0 auto;
+    background: var(--fm-content-bg);
+    min-height: 100vh;
+    box-shadow: var(--fm-shadow-sm);
+  }
+
+  &__fade {
+    animation: sf-fade-up 320ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+}
+
+@keyframes sf-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-page__fade {
+    animation: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-page * {
+    scroll-behavior: auto !important;
+  }
+}
