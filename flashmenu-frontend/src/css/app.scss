@@ -153,6 +153,9 @@ body {
   line-height: 1;
 }
 
+// ─── Vitrine pública ─────────────────────────────────────────────────────────
+@import './storefront.scss';
+
 // ─── Título de página ─────────────────────────────────────────────────────────
 .fm-page-title {
   font-size: clamp(1.25rem, 2vw, 1.625rem);

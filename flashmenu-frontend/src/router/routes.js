@@ -28,6 +28,13 @@ const routes = [
     ],
   },
 
+  // Vitrine pública — anônima, white-label (rotas estáticas acima têm prioridade)
+  {
+    path: '/:slug([a-z0-9-]+)',
+    component: () => import('layouts/StorefrontLayout.vue'),
+    children: [{ path: '', component: () => import('pages/storefront/StorefrontPage.vue') }],
+  },
+
   // 404
   {
     path: '/:catchAll(.*)*',
