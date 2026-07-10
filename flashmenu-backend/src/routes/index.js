@@ -5,6 +5,7 @@ import categoryRoutes from './category.routes.js'
 import itemRoutes from './item.routes.js'
 import uploadRoutes from './upload.routes.js'
 import publicRoutes from './public.routes.js'
+import dashboardRoutes from './dashboard.routes.js'
 
 const router = Router()
 
@@ -12,6 +13,7 @@ router.use('/auth', authRoutes)
 router.use('/restaurants', restaurantRoutes)
 router.use('/restaurants/me/categories', categoryRoutes)
 router.use('/restaurants/me/items', itemRoutes)
+router.use('/restaurants/me', dashboardRoutes)
 router.use('/uploads', uploadRoutes)
 router.use('/public', publicRoutes)
 
