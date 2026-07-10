@@ -1,7 +1,5 @@
 import { rateLimit } from 'express-rate-limit'
 
-// Rate limiting só ativo em produção — em dev evita bloqueios durante teste manual.
-// Para testar rate limiting localmente: NODE_ENV=production npm run dev
 const skip = () => process.env.NODE_ENV !== 'production'
 
 function jsonHandler(res, _req, options) {
