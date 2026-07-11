@@ -20,7 +20,6 @@
       </q-inner-loading>
 
       <div v-if="!loading" class="settings__grid">
-        <!-- Perfil + Aparência + Horário + Vitrine em grade (linhas alinhadas em altura) -->
         <q-form ref="profileForm" class="settings__profile-grid" @submit.prevent="saveProfile">
           <!-- Linha 1: Vitrine | Aparência -->
           <section class="fm-card settings__card">
