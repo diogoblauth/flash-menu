@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isAuthenticated = computed(() => Boolean(token.value))
   const restaurantName = computed(() => restaurant.value?.name || '')
   const restaurantSlug = computed(() => restaurant.value?.slug || '')
+  const needsOnboarding = computed(() => Boolean(restaurant.value) && !restaurant.value.onboardingCompleted)
 
   function setSession({ token: newToken, restaurant: newRestaurant }) {
     token.value = newToken
@@ -28,6 +29,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  function markOnboardingComplete() {
+    if (restaurant.value) {
+      restaurant.value = { ...restaurant.value, onboardingCompleted: true }
+      LocalStorage.setItem('restaurant', restaurant.value)
+    }
+  }
+
   function logout() {
     token.value = null
     restaurant.value = null
@@ -41,8 +49,10 @@ export const useAuthStore = defineStore('auth', () => {
     isAuthenticated,
     restaurantName,
     restaurantSlug,
+    needsOnboarding,
     setSession,
     setToken,
+    markOnboardingComplete,
     logout,
   }
 })
