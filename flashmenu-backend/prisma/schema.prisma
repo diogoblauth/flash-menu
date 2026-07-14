@@ -18,6 +18,7 @@ model Restaurant {
   email        String     @unique
   password     String
   openingHours Json?
+  onboardingCompleted Boolean @default(false)
   createdAt    DateTime   @default(now())
   categories   Category[]
   items        Item[]

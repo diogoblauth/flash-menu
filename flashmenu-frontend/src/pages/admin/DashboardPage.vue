@@ -194,6 +194,7 @@
 
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
+import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import {
   Utensils,
@@ -218,10 +219,19 @@ import StatTile from 'src/components/dashboard/StatTile.vue'
 import { getDashboard, getQrCode } from 'src/api/dashboard'
 import { notifySuccess, notifyError } from 'src/util/notify'
 import { formatBRL } from 'src/util/currency'
+import { useAuthStore } from 'src/stores/auth'
+import WelcomeTourDialog from 'src/components/onboarding/WelcomeTourDialog.vue'
 
 document.title = 'Dashboard — FlashMenu'
 
+const $q = useQuasar()
 const router = useRouter()
+const authStore = useAuthStore()
+
+// Primeiro acesso: exibe o tutorial de boas-vindas uma única vez.
+if (authStore.needsOnboarding) {
+  $q.dialog({ component: WelcomeTourDialog })
+}
 
 const loading = ref(true)
 const loadError = ref(false)
