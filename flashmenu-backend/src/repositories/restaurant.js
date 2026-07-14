@@ -20,7 +20,7 @@ async function findBySlug(slug) {
 async function findById(id) {
   return prisma.restaurant.findUnique({
     where: { id },
-    select: { id: true, name: true, slug: true, description: true, logo: true, banner: true, primaryColor: true, openingHours: true, email: true, createdAt: true },
+    select: { id: true, name: true, slug: true, description: true, logo: true, banner: true, primaryColor: true, openingHours: true, onboardingCompleted: true, email: true, createdAt: true },
   })
 }
 
@@ -102,6 +102,14 @@ async function updatePassword(id, hashedPassword) {
   return prisma.restaurant.update({ where: { id }, data: { password: hashedPassword } })
 }
 
+/**
+ * Marca o tutorial de onboarding como concluído. Idempotente.
+ * @param {number} id
+ */
+async function completeOnboarding(id) {
+  return prisma.restaurant.update({ where: { id }, data: { onboardingCompleted: true } })
+}
+
 export const restaurantRepository = {
   findByEmail,
   findBySlug,
@@ -111,4 +119,5 @@ export const restaurantRepository = {
   create,
   update,
   updatePassword,
+  completeOnboarding,
 }

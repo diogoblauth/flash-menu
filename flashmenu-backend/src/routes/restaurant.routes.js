@@ -38,6 +38,17 @@ router.put('/me', authenticate, async (req, res, next) => {
   }
 })
 
+// POST /api/v1/restaurants/me/complete-onboarding — marca o tutorial como concluído (idempotente)
+router.post('/me/complete-onboarding', authenticate, async (req, res, next) => {
+  try {
+    const updated = await restaurantRepository.completeOnboarding(req.decoded.restaurantId)
+    const { password: _, ...safe } = updated
+    res.json(safe)
+  } catch (error) {
+    next(error)
+  }
+})
+
 // PUT /api/v1/restaurants/me/password — troca de senha (confirma a senha atual)
 router.put('/me/password', authenticate, async (req, res, next) => {
   try {
