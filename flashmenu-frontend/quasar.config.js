@@ -27,8 +27,8 @@ export default defineConfig((ctx) => {
     // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-file#build
     build: {
       env: {
-        // URL de produção a definir quando o backend FlashMenu estiver no ar.
-        API: ctx.prod ? 'https://api.flashmenu.app.br' : 'http://localhost:5000',
+        // Em produção lê a URL da API da env var configurada no projeto Vercel (API_URL).
+        API: ctx.prod ? process.env.API_URL : 'http://localhost:5000',
       },
 
       // publicPath: '/',
