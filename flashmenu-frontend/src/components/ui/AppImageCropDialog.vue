@@ -117,7 +117,10 @@ function handleConfirm() {
 .crop-card--mobile {
   width: 100%;
   max-width: 100%;
-  height: 100%;
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
   border-radius: 0 !important;
 }
 
