@@ -1,17 +1,37 @@
 <template>
   <q-dialog ref="dialogRef" :maximized="$q.screen.lt.sm" persistent @hide="onDialogHide">
-    <q-card class="crop-card" :class="{ 'crop-card--mobile': $q.screen.lt.sm }">
+    <q-card class="crop-card" :class="{ 'crop-card--mobile': isMobile }">
       <div class="crop-header">
+        <!-- Mobile: X à esquerda para cancelar (padrão de app bar) -->
+        <q-btn v-if="isMobile" flat round dense class="crop-close crop-close--left" @click="onDialogCancel">
+          <X :size="20" color="var(--fm-text-secondary)" />
+        </q-btn>
+
         <div class="crop-header-info">
-          <div class="crop-icon">
+          <div v-if="!isMobile" class="crop-icon">
             <Crop :size="18" color="var(--fm-brand)" />
           </div>
-          <div>
+          <div class="min-w-0">
             <p class="crop-title">Ajustar imagem</p>
-            <p class="crop-subtitle">Posicione o quadro sobre a área que deve aparecer no cardápio</p>
+            <p v-if="!isMobile" class="crop-subtitle">
+              Posicione o quadro sobre a área que deve aparecer no cardápio
+            </p>
           </div>
         </div>
-        <q-btn flat round dense class="crop-close" @click="onDialogCancel">
+
+        <!-- Mobile: confirmar no topo, onde a barra do navegador nunca cobre -->
+        <q-btn
+          v-if="isMobile"
+          unelevated
+          no-caps
+          dense
+          color="primary"
+          class="crop-confirm-top"
+          label="Confirmar"
+          @click="handleConfirm"
+        />
+        <!-- Desktop: X à direita -->
+        <q-btn v-else flat round dense class="crop-close" @click="onDialogCancel">
           <X :size="18" color="var(--fm-text-secondary)" />
         </q-btn>
       </div>
@@ -34,7 +54,7 @@
         </q-btn>
       </div>
 
-      <q-card-actions align="right" class="crop-actions">
+      <q-card-actions v-if="!isMobile" align="right" class="crop-actions">
         <q-btn flat no-caps label="Cancelar" @click="onDialogCancel" />
         <q-btn unelevated no-caps color="primary" label="Cortar e continuar" @click="handleConfirm" />
       </q-card-actions>
@@ -64,6 +84,8 @@ const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginC
 
 const cropperRef = ref(null)
 const naturalAspectRatio = ref(1)
+
+const isMobile = computed(() => $q.screen.lt.sm)
 
 // Ajusta a altura do editor à proporção real da imagem, evitando faixas vazias
 const wrapStyle = computed(() => {
@@ -170,6 +192,39 @@ function handleConfirm() {
   flex-shrink: 0;
 }
 
+.min-w-0 {
+  min-width: 0;
+}
+
+/* ── App bar mobile: X | título centralizado | Cortar ── */
+.crop-card--mobile .crop-header {
+  align-items: center;
+  padding: 10px 12px;
+  gap: 8px;
+}
+
+.crop-card--mobile .crop-header-info {
+  flex: 1;
+  justify-content: center;
+  text-align: center;
+}
+
+.crop-card--mobile .crop-title {
+  font-size: 1rem;
+}
+
+.crop-close--left {
+  flex-shrink: 0;
+}
+
+.crop-confirm-top {
+  flex-shrink: 0;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: var(--fm-radius-md);
+  font-weight: 700;
+}
+
 .cropper-wrap {
   position: relative;
   height: 360px;
@@ -178,8 +233,12 @@ function handleConfirm() {
 }
 
 .crop-card--mobile .cropper-wrap {
-  flex: 1;
+  flex: 1 1 0;
   height: auto;
+  /* Permite que a área do cropper encolha abaixo da altura natural da imagem
+     (padrão min-height:auto de item flex). Sem isto, fotos compridas empurram
+     o rodapé para fora do card e os botões somem sob a barra do navegador. */
+  min-height: 0;
 }
 
 .cropper {
@@ -219,5 +278,20 @@ function handleConfirm() {
 
 .cropper-wrap :deep(.vue-rectangle-stencil__preview) {
   box-shadow: 0 0 0 2px var(--fm-brand);
+}
+</style>
+
+<!-- Estilo global (não scoped): o QDialog é teleportado para o body, fora do
+     escopo deste componente. No modo maximizado o Quasar força o card a
+     `height:100%` com especificidade maior que a nossa classe — isso resolvia
+     para a altura do viewport "grande" (incluindo a área atrás da barra do
+     Safari/Chrome), escondendo o rodapé. Aqui vencemos a especificidade e
+     usamos dvh para respeitar a área realmente visível. -->
+<style>
+.q-dialog__inner--maximized > .crop-card--mobile {
+  height: 100vh;
+  height: 100dvh;
+  max-height: 100vh;
+  max-height: 100dvh;
 }
 </style>
