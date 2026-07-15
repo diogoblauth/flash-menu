@@ -25,7 +25,7 @@
         <ImagePlus :size="20" color="var(--fm-brand)" />
       </div>
       <p class="dropzone-text">Clique ou arraste uma imagem</p>
-      <p class="dropzone-hint">JPEG, PNG ou WebP · até 2MB</p>
+      <p class="dropzone-hint">JPEG, PNG ou WebP · até 4MB</p>
     </div>
 
     <div
@@ -65,7 +65,7 @@ import AppImageCropDialog from 'src/components/ui/AppImageCropDialog.vue'
 
 const $q = useQuasar()
 
-const MAX_SIZE = 2 * 1024 * 1024
+const MAX_SIZE = 4 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 
 const props = defineProps({
@@ -116,7 +116,7 @@ function onDrop(event) {
 
 function validateSize(file) {
   if (file.size > MAX_SIZE) {
-    notifyError('A imagem deve ter no máximo 2MB')
+    notifyError('A imagem deve ter no máximo 4MB')
     return false
   }
   return true

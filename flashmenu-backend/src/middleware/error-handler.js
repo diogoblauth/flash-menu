@@ -13,7 +13,7 @@ export function errorHandler(error, _req, res, _next) {
 
   if (error instanceof multer.MulterError) {
     const message =
-      error.code === 'LIMIT_FILE_SIZE' ? 'Arquivo excede o limite de 2MB' : 'Erro no upload do arquivo'
+      error.code === 'LIMIT_FILE_SIZE' ? 'Arquivo excede o limite de 4MB' : 'Erro no upload do arquivo'
     return res.status(400).json({ message })
   }
 
